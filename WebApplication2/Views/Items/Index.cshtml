@@ -14,6 +14,10 @@
 			<th>Item Id</th>
 			<th>Name</th>
 			<th>Price</th>
+			<th>Serial Number</th>
+			<th>Category</th>
+			<th>Client</th>
+
 		</tr>
 	</thead>
 	<tbody>
@@ -24,7 +28,15 @@
 				<td>@item.Name</td>
 				@* display only two place of double  *@
 				<td>@item.Price.ToString("N2") $</td>
-				
+				<td>@item.SerialNumber?.Name</td>
+				<td>@item.Category?.Name</td>
+				@* access multiple client names through itemclients *@
+				<td>
+					@foreach(var client in item.ItemClients)
+					{
+						@client.Client.Name 
+					} 
+				</td>
 				<td> 
 					@* 	asp-action is redirect the link to edit action in our conroller *@
 					@* 	asp-route-id is redirect the link to speific item with id *@

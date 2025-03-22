@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using WebApplication2.Data;
 using WebApplication2.Models;
@@ -38,17 +39,25 @@ namespace WebApplication2.Controllers
         public async Task<IActionResult> Index()
         {
             // access items created in database through _context
-            var item = await _context.Items.ToListAsync();
+            // use include to access the seraial number within item class
+            var item = await _context.Items.
+                Include(s => s.SerialNumber).
+                Include(c => c.Category).
+                Include(ic => ic.ItemClients).
+                ThenInclude(c => c.Client).
+                ToListAsync();
             return View(item);
         }
 
         // create an item
         public IActionResult Create()
         {
+            // add data dictionary to select by default categories
+            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id, Name, Price")] Item item)
+        public async Task<IActionResult> Create([Bind("Id, Name, Price, CategoryId")] Item item)
         {
             // Check model inputted in our form is an actual item 
             if (ModelState.IsValid)
@@ -64,11 +73,13 @@ namespace WebApplication2.Controllers
         // edit an item - first get item then post updated item
         public async Task<IActionResult> Edit(int id)
         {
+            // add data dictionary to select by default categories
+            ViewData["Categories"] = new SelectList(_context.Categories, "Id", "Name");
             var item = await _context.Items.FirstOrDefaultAsync(x => x.Id == id);
             return View(item);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, [Bind("Id, Name, Price")] Item item)
+        public async Task<IActionResult> Edit(int id, [Bind("Id, Name, Price, CategoryId")] Item item)
         {
             // Check model inputted in our form is an actual item 
             if (ModelState.IsValid)

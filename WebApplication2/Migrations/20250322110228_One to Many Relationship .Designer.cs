@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication2.Data;
 
@@ -10,9 +11,11 @@ using WebApplication2.Data;
 namespace WebApplication2.Migrations
 {
     [DbContext(typeof(WebApplication2Context))]
-    partial class WebApplication2ContextModelSnapshot : ModelSnapshot
+    [Migration("20250322110228_One to Many Relationship ")]
+    partial class OnetoManyRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,23 +53,6 @@ namespace WebApplication2.Migrations
                         });
                 });
 
-            modelBuilder.Entity("WebApplication2.Models.Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Client");
-                });
-
             modelBuilder.Entity("WebApplication2.Models.Item", b =>
                 {
                     b.Property<int>("Id")
@@ -102,21 +88,6 @@ namespace WebApplication2.Migrations
                             Price = 40.0,
                             SerialNumberId = 10
                         });
-                });
-
-            modelBuilder.Entity("WebApplication2.Models.ItemClient", b =>
-                {
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ItemId", "ClientId");
-
-                    b.HasIndex("ClientId");
-
-                    b.ToTable("ItemClients");
                 });
 
             modelBuilder.Entity("WebApplication2.Models.SerialNumber", b =>
@@ -160,25 +131,6 @@ namespace WebApplication2.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("WebApplication2.Models.ItemClient", b =>
-                {
-                    b.HasOne("WebApplication2.Models.Client", "Client")
-                        .WithMany("ItemClients")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebApplication2.Models.Item", "Item")
-                        .WithMany("ItemClients")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Client");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("WebApplication2.Models.SerialNumber", b =>
                 {
                     b.HasOne("WebApplication2.Models.Item", "Item")
@@ -193,15 +145,8 @@ namespace WebApplication2.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("WebApplication2.Models.Client", b =>
-                {
-                    b.Navigation("ItemClients");
-                });
-
             modelBuilder.Entity("WebApplication2.Models.Item", b =>
                 {
-                    b.Navigation("ItemClients");
-
                     b.Navigation("SerialNumber");
                 });
 #pragma warning restore 612, 618
