@@ -1,0 +1,38 @@
+﻿@* import list of models than one model *@
+@model List<WebApplication2.Models.Item>
+
+@{
+	// title of tab include in ViewData which is a dictionary in C# works with key-value pairs
+	ViewData["Title"] = "Index";
+}
+
+<h3>Index</h3>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>Item Id</th>
+			<th>Name</th>
+			<th>Price</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach(var item in Model)
+		{
+			<tr>
+				<td>@item.Id</td>
+				<td>@item.Name</td>
+				@* display only two place of double  *@
+				<td>@item.Price.ToString("N2") $</td>
+				
+				<td> 
+					@* 	asp-action is redirect the link to edit action in our conroller *@
+					@* 	asp-route-id is redirect the link to speific item with id *@
+					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+
+				 </td>
+			</tr>
+		}
+	</tbody>
+</table>

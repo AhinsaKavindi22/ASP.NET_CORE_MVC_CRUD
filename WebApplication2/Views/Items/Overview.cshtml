@@ -1,0 +1,38 @@
+﻿@* eraser directives *@
+@model WebApplication2.Models.Item;
+
+@* Razor syntax *@
+@{
+	var message = "Hello World!";
+	var items = new List<string> { "Keyboard", "Mouse", "Monitor" };
+	var isLoggedIn = false;
+}
+
+<h1>@message</h1>
+<ul>
+	@foreach(var item in items)
+	{
+		<li>@item</li>
+	}
+</ul>
+
+@if (isLoggedIn)
+{
+	<p>Welcome back!</p>
+}
+else
+{
+	<p>Please log in.</p>
+}
+
+@* <p>This is the Name of Item @Model.Name </p> *@
+
+<form asp-action="Submit">
+
+	@* asp-for is bind input fields to the nmae property of model. This ensures correct value is posted back to server when form is submitted *@
+	<div>
+		<input asp-for="Name" />
+	</div>
+
+	<button type="submit">Submit</button>
+</form>
